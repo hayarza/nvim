@@ -1,0 +1,12 @@
+# Lazy.nvim data
+lazy-lock.json
+
+# OS files
+.DS_Store
+
+# Log files
+*.log
+
+# Backup files
+*.bak
+*~
