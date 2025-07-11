@@ -934,4 +934,42 @@ return {
 			})
 		end,
 	},
+	-- Autopairs - Auto-close brackets, quotes, etc.
+	{
+		"windwp/nvim-autopairs",
+		event = "InsertEnter",
+		config = function()
+			local autopairs = require("nvim-autopairs")
+
+			autopairs.setup({
+				check_ts = true, -- Enable treesitter integration
+				ts_config = {
+					lua = { "string" }, -- Don't add pairs in lua string treesitter nodes
+					javascript = { "string", "template_string" }, -- Don't add pairs in JS strings
+					java = false, -- Don't check treesitter on java
+				},
+				disable_filetype = { "TelescopePrompt", "spectre_panel" },
+				disable_in_macro = true, -- Disable when recording or executing a macro
+				disable_in_visualblock = false, -- Disable when in visual block mode
+				disable_in_replace_mode = true,
+				ignored_next_char = [=[[%w%%%'%[%"%.%`%$]]=],
+				enable_moveright = true,
+				enable_afterquote = true, -- Add bracket pairs after quote
+				enable_check_bracket_line = true, -- Check bracket in same line
+				enable_bracket_in_quote = true, -- Enable bracket pairs inside quotes
+				enable_abbr = false, -- Trigger abbreviation
+				break_undo = true, -- Switch for basic rule break undo sequence
+				check_comma = true,
+				map_cr = true,
+				map_bs = true, -- Map the <BS> key
+				map_c_h = false, -- Map the <C-h> key to delete a pair
+				map_c_w = false, -- Map <C-w> to delete a pair if possible
+			})
+
+			-- Integration with nvim-cmp
+			local cmp_autopairs = require("nvim-autopairs.completion.cmp")
+			local cmp = require("cmp")
+			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
+		end,
+	},
 }
