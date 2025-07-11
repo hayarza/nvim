@@ -972,4 +972,165 @@ return {
 			cmp.event:on("confirm_done", cmp_autopairs.on_confirm_done())
 		end,
 	},
+	-- Indent-blankline - Indentation guides
+	{
+		"lukas-reineke/indent-blankline.nvim",
+		event = { "BufReadPre", "BufNewFile" },
+		main = "ibl",
+		config = function()
+			local ibl = require("ibl")
+
+			ibl.setup({
+				indent = {
+					char = "│",
+					tab_char = "│",
+				},
+				scope = {
+					enabled = true,
+					show_start = true,
+					show_end = false,
+					injected_languages = false,
+					highlight = { "Function", "Label" },
+					priority = 500,
+				},
+				exclude = {
+					filetypes = {
+						"help",
+						"alpha",
+						"dashboard",
+						"neo-tree",
+						"Trouble",
+						"trouble",
+						"lazy",
+						"mason",
+						"notify",
+						"toggleterm",
+						"lazyterm",
+					},
+				},
+			})
+		end,
+	},
+	-- Toggleterm - Terminal toggle
+	{
+		"akinsho/toggleterm.nvim",
+		version = "*",
+		config = function()
+			local toggleterm = require("toggleterm")
+
+			toggleterm.setup({
+				size = 20,
+				open_mapping = [[<C-\>]],
+				hide_numbers = true,
+				shade_filetypes = {},
+				shade_terminals = true,
+				shading_factor = 2,
+				start_in_insert = true,
+				insert_mappings = true,
+				terminal_mappings = true,
+				persist_size = true,
+				persist_mode = true,
+				direction = "float",
+				close_on_exit = true,
+				shell = vim.o.shell,
+				auto_scroll = true,
+				float_opts = {
+					border = "curved",
+					winblend = 0,
+					highlights = {
+						border = "Normal",
+						background = "Normal",
+					},
+				},
+			})
+
+			function _G.set_terminal_keymaps()
+				local opts = { buffer = 0 }
+				vim.keymap.set("t", "<esc>", [[<C-\><C-n>]], opts)
+				vim.keymap.set("t", "jk", [[<C-\><C-n>]], opts)
+				vim.keymap.set("t", "<C-h>", [[<Cmd>wincmd h<CR>]], opts)
+				vim.keymap.set("t", "<C-j>", [[<Cmd>wincmd j<CR>]], opts)
+				vim.keymap.set("t", "<C-k>", [[<Cmd>wincmd k<CR>]], opts)
+				vim.keymap.set("t", "<C-l>", [[<Cmd>wincmd l<CR>]], opts)
+				vim.keymap.set("t", "<C-w>", [[<C-\><C-n><C-w>]], opts)
+			end
+
+			vim.cmd("autocmd! TermOpen term://* lua set_terminal_keymaps()")
+
+			-- Custom terminal commands
+			local Terminal = require("toggleterm.terminal").Terminal
+
+			-- Lazygit terminal
+			local lazygit = Terminal:new({
+				cmd = "lazygit",
+				dir = "git_dir",
+				direction = "float",
+				float_opts = {
+					border = "double",
+				},
+				on_open = function(term)
+					vim.cmd("startinsert!")
+					vim.api.nvim_buf_set_keymap(
+						term.bufnr,
+						"n",
+						"q",
+						"<cmd>close<CR>",
+						{ noremap = true, silent = true }
+					)
+				end,
+				on_close = function(term)
+					vim.cmd("startinsert!")
+				end,
+			})
+
+			function _LAZYGIT_TOGGLE()
+				lazygit:toggle()
+			end
+
+			-- Python REPL
+			local python = Terminal:new({
+				cmd = "python3",
+				direction = "float",
+				float_opts = {
+					border = "double",
+				},
+			})
+
+			function _PYTHON_TOGGLE()
+				python:toggle()
+			end
+
+			-- Node REPL
+			local node = Terminal:new({
+				cmd = "node",
+				direction = "float",
+				float_opts = {
+					border = "double",
+				},
+			})
+
+			function _NODE_TOGGLE()
+				node:toggle()
+			end
+
+			-- Set keymaps
+			local keymap = vim.keymap
+			keymap.set("n", "<leader>tf", "<cmd>ToggleTerm direction=float<cr>", { desc = "Toggle floating terminal" })
+			keymap.set(
+				"n",
+				"<leader>th",
+				"<cmd>ToggleTerm size=10 direction=horizontal<cr>",
+				{ desc = "Toggle horizontal terminal" }
+			)
+			keymap.set(
+				"n",
+				"<leader>tv",
+				"<cmd>ToggleTerm size=80 direction=vertical<cr>",
+				{ desc = "Toggle vertical terminal" }
+			)
+			keymap.set("n", "<leader>tg", "<cmd>lua _LAZYGIT_TOGGLE()<cr>", { desc = "Toggle lazygit" })
+			keymap.set("n", "<leader>tp", "<cmd>lua _PYTHON_TOGGLE()<cr>", { desc = "Toggle python REPL" })
+			keymap.set("n", "<leader>tn", "<cmd>lua _NODE_TOGGLE()<cr>", { desc = "Toggle node REPL" })
+		end,
+	},
 }
