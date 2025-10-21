@@ -25,4 +25,8 @@ require('lazy').setup {
   require 'plugins.autocompletion',
   require 'plugins.autoformatter',
   require 'plugins.gitsigns',
+  require 'plugins.alpha',
+  require 'plugins.indent-blankline',
+  require 'plugins.lazygit',
+  require 'plugins.misc',
 }
