@@ -60,3 +60,13 @@ vim.keymap.set('v', '>', '>gv', opts)
 
 -- Keep last yanked when pasting
 vim.keymap.set('v', 'p', '"_dP', opts)
+
+-- Diagnostics navigation (updated API)
+vim.keymap.set('n', '[d', function()
+  vim.diagnostic.jump { count = -1 }
+end, opts)
+vim.keymap.set('n', ']d', function()
+  vim.diagnostic.jump { count = 1 }
+end, opts)
+vim.keymap.set('n', '<leader>d', vim.diagnostic.open_float, opts) -- show diagnostic in floating window
+vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, opts) -- show all diagnostics in location list
