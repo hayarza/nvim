@@ -26,7 +26,16 @@ return {
     local sources = {
       diagnostics.checkmake,
       -- formatting.biome.with { filetypes = { 'html', 'json', 'yaml', 'markdown', 'ts', 'tsx', 'js', 'jsx' } },
-      formatting.biome,
+      formatting.biome.with {
+        filetypes = {
+          'javascript',
+          'javascriptreact',
+          'typescript',
+          'typescriptreact',
+          'json',
+          'jsonc',
+        },
+      },
       formatting.stylua,
       formatting.shfmt.with { args = { '-i', '4' } },
       formatting.terraform_fmt,
