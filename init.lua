@@ -1,0 +1,34 @@
+-- ~/.config/nvim/init.lua
+
+-- Leader key (set this early)
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
+-- Line numbers
+vim.opt.number = true
+vim.opt.relativenumber = true
+
+-- Tabs & indentation
+vim.opt.expandtab = true
+vim.opt.shiftwidth = 4
+vim.opt.tabstop = 4
+vim.opt.smartindent = true
+
+-- Search
+vim.opt.ignorecase = true
+vim.opt.smartcase = true
+vim.opt.hlsearch = true
+
+-- Appearance
+vim.opt.termguicolors = true
+vim.opt.signcolumn = "yes"
+vim.opt.cursorline = true
+
+-- Behavior
+vim.opt.splitright = true
+vim.opt.splitbelow = true
+vim.opt.undofile = true
+vim.opt.clipboard = "unnamedplus"
+
+-- Clear search highlight with Escape
+vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
