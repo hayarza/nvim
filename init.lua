@@ -34,25 +34,6 @@ vim.opt.autoread = true
 -- Clear search highlight with Escape
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
--- Auto-reload config on save
-vim.api.nvim_create_autocmd("BufWritePost", {
-	pattern = vim.fn.expand("~/.config/nvim/init.lua"),
-	callback = function()
-		dofile(vim.fn.expand("~/.config/nvim/init.lua"))
-		vim.notify("Config reloaded!", vim.log.levels.INFO)
-	end,
-})
-
--- Check for external file changes
-vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
-	pattern = "*",
-	callback = function()
-		if vim.fn.mode() ~= "c" then
-			vim.cmd("checktime")
-		end
-	end,
-})
-
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
@@ -140,5 +121,12 @@ require("lazy").setup({
 		keys = {
 			{ "<leader>gg", "<cmd>LazyGit<CR>", desc = "Open LazyGit" },
 		},
+	},
+	-- Git Signs
+	{
+		"lewis6991/gitsigns.nvim",
+		config = function()
+			require("gitsigns").setup()
+		end,
 	},
 })
