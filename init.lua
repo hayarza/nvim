@@ -36,48 +36,67 @@ vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
-  vim.fn.system({
-    "git", "clone", "--filter=blob:none",
-    "https://github.com/folke/lazy.nvim.git",
-    "--branch=stable", lazypath,
-  })
+	vim.fn.system({
+		"git",
+		"clone",
+		"--filter=blob:none",
+		"https://github.com/folke/lazy.nvim.git",
+		"--branch=stable",
+		lazypath,
+	})
 end
 vim.opt.rtp:prepend(lazypath)
 
 -- Plugins
 require("lazy").setup({
-   -- Neo-tree
-  {
-    "nvim-neo-tree/neo-tree.nvim",
-    branch = "v3.x",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "nvim-tree/nvim-web-devicons",
-      "MunifTanjim/nui.nvim",
-    },
-    keys = {
-      { "<leader>e", "<cmd>Neotree toggle<CR>", desc = "File explorer" },
-    },
-  },
-  -- Telescope
-  {
-    "nvim-telescope/telescope.nvim",
-    branch = "0.1.x",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-    },
-    keys = {
-      { "<leader>ff", "<cmd>Telescope find_files<CR>", desc = "Find files" },
-      { "<leader>fg", "<cmd>Telescope live_grep<CR>", desc = "Live grep" },
-      { "<leader>fb", "<cmd>Telescope buffers<CR>", desc = "Buffers" },
-      { "<leader>fh", "<cmd>Telescope help_tags<CR>", desc = "Help" },
-    },
-  },
-{
-    "nvim-lualine/lualine.nvim",
-    dependencies = { "nvim-tree/nvim-web-devicons" },
-    config = function()
-      require("lualine").setup()
-    end,
-  },
+	-- Neo-tree
+	{
+		"nvim-neo-tree/neo-tree.nvim",
+		branch = "v3.x",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-tree/nvim-web-devicons",
+			"MunifTanjim/nui.nvim",
+		},
+		keys = {
+			{ "<leader>e", "<cmd>Neotree toggle<CR>", desc = "File explorer" },
+		},
+	},
+	-- Telescope
+	{
+		"nvim-telescope/telescope.nvim",
+		branch = "0.1.x",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+		},
+		keys = {
+			{ "<leader>ff", "<cmd>Telescope find_files<CR>", desc = "Find files" },
+			{ "<leader>fg", "<cmd>Telescope live_grep<CR>", desc = "Live grep" },
+			{ "<leader>fb", "<cmd>Telescope buffers<CR>", desc = "Buffers" },
+			{ "<leader>fh", "<cmd>Telescope help_tags<CR>", desc = "Help" },
+		},
+	},
+	-- Status Line
+	{
+		"nvim-lualine/lualine.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		config = function()
+			require("lualine").setup()
+		end,
+	},
+	-- LUA Auto Formatter
+	{
+		"stevearc/conform.nvim",
+		config = function()
+			require("conform").setup({
+				formatters_by_ft = {
+					lua = { "stylua" },
+				},
+				format_on_save = {
+					timeout_ms = 500,
+					lsp_fallback = true,
+				},
+			})
+		end,
+	},
 })
