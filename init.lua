@@ -29,6 +29,7 @@ vim.opt.splitright = true
 vim.opt.splitbelow = true
 vim.opt.undofile = true
 vim.opt.clipboard = "unnamedplus"
+vim.opt.autoread = true
 
 -- Clear search highlight with Escape
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
@@ -39,6 +40,16 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 	callback = function()
 		dofile(vim.fn.expand("~/.config/nvim/init.lua"))
 		vim.notify("Config reloaded!", vim.log.levels.INFO)
+	end,
+})
+
+-- Check for external file changes
+vim.api.nvim_create_autocmd({ "FocusGained", "BufEnter", "CursorHold", "CursorHoldI" }, {
+	pattern = "*",
+	callback = function()
+		if vim.fn.mode() ~= "c" then
+			vim.cmd("checktime")
+		end
 	end,
 })
 
