@@ -73,4 +73,11 @@ require("lazy").setup({
       { "<leader>fh", "<cmd>Telescope help_tags<CR>", desc = "Help" },
     },
   },
+{
+    "nvim-lualine/lualine.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("lualine").setup()
+    end,
+  },
 })
