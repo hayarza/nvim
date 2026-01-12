@@ -33,6 +33,15 @@ vim.opt.clipboard = "unnamedplus"
 -- Clear search highlight with Escape
 vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 
+-- Auto-reload config on save
+vim.api.nvim_create_autocmd("BufWritePost", {
+	pattern = vim.fn.expand("~/.config/nvim/init.lua"),
+	callback = function()
+		dofile(vim.fn.expand("~/.config/nvim/init.lua"))
+		vim.notify("Config reloaded!", vim.log.levels.INFO)
+	end,
+})
+
 -- Bootstrap lazy.nvim
 local lazypath = vim.fn.stdpath("data") .. "/lazy/lazy.nvim"
 if not vim.loop.fs_stat(lazypath) then
