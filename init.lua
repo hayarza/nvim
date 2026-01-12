@@ -99,4 +99,16 @@ require("lazy").setup({
 			})
 		end,
 	},
+	-- Toggle Term
+	{
+		"akinsho/toggleterm.nvim",
+		version = "*",
+		keys = {
+			{ "<C-/>", "<cmd>ToggleTerm<CR>", desc = "Toggle terminal" },
+			{ "<C-/>", "<cmd>ToggleTerm<CR>", desc = "Toggle terminal", mode = "t" },
+		},
+		opts = {
+			direction = "horizontal",
+		},
+	},
 })
